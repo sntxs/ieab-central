@@ -115,15 +115,15 @@
 import { ref, computed } from 'vue'
 import { HeartIcon, UserGroupIcon, HandRaisedIcon } from '@heroicons/vue/24/outline'
 
-const categorias = ['Pastores', 'Presbitério', 'Líderes', 'Diaconia']
-const categoriaAtual = ref('Pastores')
+const categorias = ['Pastoreio', 'Presbitério', 'Missionários', 'Líderes', 'Diaconia',]
+const categoriaAtual = ref('Pastoreio')
 
 const lideres = [
   {
     nome: 'Pr. Jocemiro Aparecido da Silva',
     cargo: 'Pastor Principal',
     foto: 'https://placehold.co/200x200',
-    categoria: 'Pastores'
+    categoria: 'Pastoreio'
   },
   {
     nome: 'Presb. Dilson Júnior Machado',
@@ -132,7 +132,12 @@ const lideres = [
     categoria: 'Presbitério'
 
   },
-
+  {
+    nome: 'Presb. Luiz Felipe Fernandes Veloso',
+    cargo: 'Presbítero',
+    foto: 'https://placehold.co/200x200',
+    categoria: 'Presbitério'
+  },
   {
     nome: 'Presb. Arthur Lima da Costa',
     cargo: 'Presbítero',
@@ -173,6 +178,15 @@ const lideres = [
     categoria: 'Líderes'
 
   },
+
+  // Missionário
+  {
+    nome: 'Thamiris Veloso',
+    cargo: 'Missionária',
+    foto: 'https://placehold.co/200x200',
+    categoria: 'Missionários'
+  },
+
 
   // Diaconia
   {
