@@ -43,7 +43,7 @@
             :alt="foto.titulo"
             class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110"
           />
-          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
+          <div class="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
             <div class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity">
               <h3 class="text-lg font-bold">{{ foto.titulo }}</h3>
               <p class="text-sm">{{ foto.data }}</p>
@@ -56,7 +56,7 @@
     <!-- Modal de Visualização -->
     <div
       v-if="modalAberto"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-opacity-90"
       @click.self="fecharModal"
     >
       <button
