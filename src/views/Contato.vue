@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <div class="relative h-[300px]">
       <img src="https://placehold.co/1920x600" alt="Entre em Contato" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="absolute inset-0 bg-opacity-50 flex items-center justify-center">
         <h1 class="text-4xl md:text-5xl text-white font-bold">Entre em Contato</h1>
       </div>
     </div>

@@ -7,7 +7,7 @@
         alt="Galeria de Fotos"
         class="w-full h-full object-cover"
       />
-      <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="absolute inset-0 bg-opacity-50 flex items-center justify-center">
         <h1 class="text-4xl md:text-5xl text-white font-bold">Nossa Galeria</h1>
       </div>
     </div>
