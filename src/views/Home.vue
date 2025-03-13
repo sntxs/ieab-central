@@ -9,7 +9,7 @@
         <swiper-slide v-for="(slide, index) in slides" :key="index">
           <div class="relative h-[600px]">
             <img :src="slide.image" :alt="slide.title" class="absolute inset-0 w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-center">
+            <div class="absolute inset-0 bg-opacity-50 flex items-center justify-center text-center">
               <div class="text-white">
                 <h1 class="text-4xl md:text-6xl font-bold mb-4">{{ slide.title }}</h1>
                 <p class="text-xl md:text-2xl">{{ slide.description }}</p>
