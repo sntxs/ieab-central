@@ -117,10 +117,10 @@ const eventos = [
       "Uma noite especial para juventude com louvor, dinâmicas e muito mais.",
     data: "29/03/2024",
     horario: "19:00",
-    local: "Rua: Cel. Adão Ferreira da Silva Cabral, 178 - Danúbio Azul",
+    local: "Rua 14 de Julho, 1152 - Centro",
     categoria: "Jovens",
     imagem:
-      "https://res.cloudinary.com/dgbo657qq/image/upload/v1742229075/3_wfquuo.png",
+      "https://res.cloudinary.com/dgbo657qq/image/upload/v1742235979/3-1_svudrc.png",
   },
   /*   {
     id: 3,

@@ -30,7 +30,7 @@
           </div>
           <div class="relative w-full overflow-hidden rounded-lg">
             <img
-              src="https://placehold.co/600x400"
+              src="https://res.cloudinary.com/dgbo657qq/image/upload/v1742229075/1_clr136.png"
               alt="História da Igreja"
               class="w-full h-auto max-w-full object-contain"
             />
@@ -89,6 +89,23 @@
           Nossa Liderança
         </h2>
 
+        <!-- Filtro de Igreja -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+          <button
+            v-for="igreja in igrejas"
+            :key="igreja"
+            @click="igrejaAtual = igreja"
+            :class="[
+              'px-4 py-2 rounded-full transition-colors',
+              igrejaAtual === igreja
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+            ]"
+          >
+            {{ igreja }}
+          </button>
+        </div>
+
         <!-- Filtro de Liderança -->
         <div class="flex flex-wrap justify-center mb-8 gap-2 px-2">
           <button
@@ -145,6 +162,8 @@ import {
   HandRaisedIcon,
 } from "@heroicons/vue/24/outline";
 
+const igrejas = ["IEAB CG - Central", "IEAB CG - Norte"];
+const igrejaAtual = ref("IEAB CG - Central");
 const categorias = [
   "Pastoreio",
   "Presbitério",
@@ -154,27 +173,21 @@ const categorias = [
 ];
 const categoriaAtual = ref("Pastoreio");
 
-const lideres = [
+const liderescentral = [
   {
-    nome: "Pr. Jocemiro Aparecido da Silva",
+    nome: "Jocemiro Aparecido da Silva",
     cargo: "Pastor Principal",
     foto: "https://placehold.co/200x200",
     categoria: "Pastoreio",
   },
   {
-    nome: "Presb. Dilson Júnior Machado",
+    nome: "Dilson Júnior Machado",
     cargo: "Presbítero",
     foto: "https://placehold.co/200x200",
     categoria: "Presbitério",
   },
   {
-    nome: "Presb. Luiz Felipe Fernandes Veloso",
-    cargo: "Presbítero",
-    foto: "https://placehold.co/200x200",
-    categoria: "Presbitério",
-  },
-  {
-    nome: "Presb. Arthur Lima da Costa",
+    nome: "Arthur Lima da Costa",
     cargo: "Presbítero",
     foto: "https://placehold.co/200x200",
     categoria: "Presbitério",
@@ -182,13 +195,13 @@ const lideres = [
 
   // Líderes
   {
-    nome: "Presb Arthur Lima da Costa",
+    nome: "Arthur Lima da Costa",
     cargo: "Assessor de Música",
     foto: "https://placehold.co/200x200",
     categoria: "Líderes",
   },
   {
-    nome: "Presb. Dilson Júnior Machado",
+    nome: "Dilson Júnior Machado",
     cargo: "Assessor de Adultos",
     foto: "https://placehold.co/200x200",
     categoria: "Líderes",
@@ -214,12 +227,12 @@ const lideres = [
   },
 
   // Missionário
-  {
-    nome: "Thamiris Veloso",
+/*   {
+    nome: " ",
     cargo: "Missionária",
     foto: "https://placehold.co/200x200",
     categoria: "Missionários",
-  },
+  }, */
 
   // Diaconia
   {
@@ -242,8 +255,27 @@ const lideres = [
   },
 ];
 
+const lideresnorte = [
+  {
+    nome: "Luis",
+    cargo: "Pastor Principal",
+    foto: "https://placehold.co/200x200",
+    categoria: "Pastoreio",
+  },
+  {
+    nome: "Thamiris Veloso",
+    cargo: "Missionária",
+    foto: "https://placehold.co/200x200",
+    categoria: "Missionários",
+  },
+];
+
 const lideresFilterados = computed(() => {
-  return lideres.filter((lider) => lider.categoria === categoriaAtual.value);
+  const lideresDaIgreja =
+    igrejaAtual.value === "IEAB CG - Central" ? liderescentral : lideresnorte;
+  return lideresDaIgreja.filter(
+    (lider) => lider.categoria === categoriaAtual.value
+  );
 });
 </script>
 
