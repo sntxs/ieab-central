@@ -85,27 +85,6 @@ const slides = [
   }
 ]
 
-const eventos = [
-  {
-    image: 'https://placehold.co/400x300',
-    title: 'Culto de Celebração',
-    description: 'Venha celebrar conosco neste domingo especial',
-    date: '10/04/2024'
-  },
-  {
-    image: 'https://placehold.co/400x300',
-    title: 'Encontro de Jovens',
-    description: 'Uma noite de louvor e comunhão',
-    date: '15/04/2024'
-  },
-  {
-    image: 'https://placehold.co/400x300',
-    title: 'Escola Bíblica',
-    description: 'Aprenda mais sobre a palavra de Deus',
-    date: '20/04/2024'
-  }
-]
-
 const eventosRecorrentes = [
   {
     id: 1,
@@ -131,10 +110,10 @@ const eventosRecorrentes = [
 
   {
     id: 4,
-    titulo: 'Reunião de Jovens',
-    endereco: 'Rua 14 de Julho, 1152',
-    frequencia: 'Todos os sábados',
-    horario: '19:00'
+    titulo: 'Célula Carandá',
+    endereco: 'Rua Alfredo Kassar, 178',
+    frequencia: 'Em breve',
+    horario: 'Em breve'
   },
 
 
