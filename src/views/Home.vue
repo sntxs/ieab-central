@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Hero Section -->
-    <div class="relative h-[600px]">
+    <div class="relative w-full overflow-hidden">
       <swiper
         :modules="modules"
         :slides-per-view="1"
@@ -20,17 +20,17 @@
               :alt="slide.title"
               class="w-full h-auto max-w-full object-contain"
             />
-            
-        <!--     <div
-              class="absolute inset-0 bg-opacity-50 flex items-center justify-center text-center"
-            >
-              <div class="text-white">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">
-                  {{ slide.title }}
-                </h1>
-                <p class="text-xl md:text-2xl">{{ slide.description }}</p>
-              </div>
-            </div> -->
+
+            <!--     <div
+                class="absolute inset-0 bg-opacity-50 flex items-center justify-center text-center"
+              >
+                <div class="text-white">
+                  <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                    {{ slide.title }}
+                  </h1>
+                  <p class="text-xl md:text-2xl">{{ slide.description }}</p>
+                </div>
+              </div> -->
           </div>
         </swiper-slide>
       </swiper>
@@ -98,20 +98,21 @@ const modules = [Pagination, Navigation, Autoplay];
 
 const slides = [
   {
-    image: "https://res.cloudinary.com/dgbo657qq/image/upload/v1742238062/1_ejsuhy.png",
-/*     title: "Bem-vindo à nossa Igreja",
-    description: "Um lugar de fé, amor e comunhão", */
+    image:
+      "https://res.cloudinary.com/dgbo657qq/image/upload/v1742238062/1_ejsuhy.png",
+    /*     title: "Bem-vindo à nossa Igreja",
+      description: "Um lugar de fé, amor e comunhão", */
   },
-/*   {
-    image: "https://placehold.co/800x800",
-    title: "Venha nos Conhecer",
-    description: "Cultos todos os domingos às 18h",
-  },
-  {
-    image: "https://placehold.co/800x800",
-    title: "Faça Parte da Nossa Família",
-    description: "Unidos em Cristo",
-  }, */
+  /*   {
+      image: "https://placehold.co/800x800",
+      title: "Venha nos Conhecer",
+      description: "Cultos todos os domingos às 18h",
+    },
+    {
+      image: "https://placehold.co/800x800",
+      title: "Faça Parte da Nossa Família",
+      description: "Unidos em Cristo",
+    }, */
 ];
 
 const eventosRecorrentes = [

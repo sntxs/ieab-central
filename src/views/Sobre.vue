@@ -227,7 +227,7 @@ const liderescentral = [
   },
 
   // Missionário
-/*   {
+  /*   {
     nome: " ",
     cargo: "Missionária",
     foto: "https://placehold.co/200x200",
