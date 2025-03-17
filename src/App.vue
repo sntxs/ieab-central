@@ -135,6 +135,13 @@
                 <MapPinIcon class="h-8 w-8 mr-3 text-blue-400" />
                 Rua 14 de Julho, 1152 - Centro - Campo Grande - MS
               </p>
+              <p
+                class="text-gray-300 flex items-center justify-center md:justify-start"
+              >
+                <MapPinIcon class="h-14 w-14 mr-3 text-blue-400" />
+                Rua Cel. Adão Ferreira da Silva Cabral, 178 - Vila Danubio Azul
+                - Campo Grande - MS
+              </p>
             </div>
           </div>
 
