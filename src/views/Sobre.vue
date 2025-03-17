@@ -1,16 +1,16 @@
 <template>
   <div class="bg-white">
     <!-- Hero Section -->
-    <div class="relative h-[300px]">
+    <div class="relative w-full overflow-hidden">
       <img
         src="https://res.cloudinary.com/dgbo657qq/image/upload/v1742229774/Galeria1_cg3cht.png"
         alt="Igreja"
-        class="w-full h-100 object-cover"
+        class="w-full h-auto max-w-full object-contain"
       />
     </div>
 
     <!-- História -->
-    <section class="py-40">
+    <section class="py-16">
       <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
@@ -28,11 +28,11 @@
               valores fundamentais de amor, compaixão e serviço ao próximo.
             </p>
           </div>
-          <div class="relative h-[400px]">
+          <div class="relative w-full overflow-hidden rounded-lg">
             <img
               src="https://placehold.co/600x400"
               alt="História da Igreja"
-              class="w-full h-full object-cover rounded-lg shadow-lg"
+              class="w-full h-auto max-w-full object-contain"
             />
           </div>
         </div>

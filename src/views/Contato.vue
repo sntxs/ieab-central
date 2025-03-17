@@ -1,11 +1,11 @@
 <template>
   <div class="bg-white">
     <!-- Hero Section -->
-    <div class="relative h-[400px]">
+    <div class="relative w-full overflow-hidden">
       <img
         src="https://res.cloudinary.com/dgbo657qq/image/upload/v1742229774/Galeria5_r4hzse.png"
         alt="Entre em Contato"
-        class="w-full h-105 object-cover"
+        class="w-full h-auto max-w-full object-contain"
       />
     </div>
 

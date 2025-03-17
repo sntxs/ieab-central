@@ -1,11 +1,11 @@
 <template>
   <div class="bg-white">
     <!-- Hero Section -->
-    <div class="relative h-[300px]">
+    <div class="relative w-full overflow-hidden">
       <img
         src="https://res.cloudinary.com/dgbo657qq/image/upload/v1742229774/Galeria2_mwlkpy.png"
         alt="Eventos da Igreja"
-        class="w-full h-100 object-cover"
+        class="w-full h-auto max-w-full object-contain"
       />
     </div>
 
@@ -53,7 +53,7 @@
             <img
               :src="evento.imagem"
               :alt="evento.titulo"
-              class="w-full h-70 object-cover"
+              class="w-full h-auto max-w-full object-contain"
             />
             <div class="p-4 md:p-6">
               <div class="flex items-center mb-2">
@@ -95,7 +95,7 @@ import { ref, computed } from "vue";
 import { CalendarIcon, ClockIcon, MapPinIcon } from "@heroicons/vue/24/outline";
 
 const filtroAtual = ref("Todos");
-const categorias = ["Todos", "Cultos", "Jovens", /* , "Família" */];
+const categorias = ["Todos", "Cultos", "Jovens" /* , "Família" */];
 
 const eventos = [
   {

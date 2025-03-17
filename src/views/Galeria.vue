@@ -1,11 +1,11 @@
 <template>
   <div class="bg-white">
     <!-- Hero Section -->
-    <div class="relative h-[400px]">
+    <div class="relative w-full overflow-hidden">
       <img
         src="https://res.cloudinary.com/dgbo657qq/image/upload/v1742229774/Galeria3_uheogu.png"
         alt="Galeria de Fotos"
-        class="w-full h-100 object-cover"
+        class="w-full h-auto max-w-full object-contain"
       />
     </div>
 
@@ -40,7 +40,7 @@
           <img
             :src="foto.url"
             :alt="foto.titulo"
-            class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110"
+            class="w-full h-full max-w-full object-contain transform transition-transform duration-300 group-hover:scale-110"
           />
           <div
             class="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center"

@@ -1,11 +1,11 @@
 <template>
   <div class="bg-white">
     <!-- Hero Section -->
-    <div class="relative h-[400px]">
+    <div class="relative w-full overflow-hidden">
       <img
         src="https://res.cloudinary.com/dgbo657qq/image/upload/v1742229774/Galeria4_x6qhjc.png"
         alt="Nossa Localização"
-        class="w-full h-100 object-cover"
+        class="w-full h-auto max-w-full object-contain"
       />
     </div>
 
@@ -73,6 +73,7 @@
         <!-- Mapa -->
         <div class="h-[500px] bg-gray-100 rounded-lg overflow-hidden shadow-lg">
           <iframe
+            class="w-full h-full max-w-full object-contain"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3046.754792069829!2d-54.618226325752964!3d-20.47046238104276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9486e61bfcb261f7%3A0x65837184a4649607!2sRua%2014%20de%20Julho%2C%201152%20-%20Centro%2C%20Campo%20Grande%20-%20MS%2C%2079004-390!5e1!3m2!1spt-BR!2sbr!4v1739047467912!5m2!1spt-BR!2sbr"
             width="600"
             height="450"
