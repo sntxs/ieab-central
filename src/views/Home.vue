@@ -104,8 +104,8 @@ const eventosRecorrentes = [
     id: 3,
     titulo: 'Estudo Bíblico',
     endereco: 'Rua 14 de Julho, 1152',
-    frequencia: 'Todas as quartas',
-    horario: '19:30'
+    frequencia: 'Todas os domingos',
+    horario: '09:00 (Café da manhã ás 08:30)'
   },
 
   {
