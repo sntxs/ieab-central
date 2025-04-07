@@ -110,70 +110,59 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/vue/24/outline";
+import { db } from '../firebase/config';
+import { collection, doc, getDocs, getDoc } from 'firebase/firestore';
 
-const categorias = [
-  "Todos",
-  "Cultos",
-  "Eventos",
-  "Jovens",
-  "Família",
-  "Missões",
-];
+const categorias = ref(["Todos", "Cultos", "Eventos", "Jovens", "Família", "Missões"]);
 const categoriaAtual = ref("Todos");
 const modalAberto = ref(false);
 const indiceAtual = ref(0);
+const fotos = ref([]);
 
-const fotos = [
-  {
-    url: "https://placehold.co/800x800",
-    titulo: "Culto de Celebração",
-    descricao: "Momento especial de adoração em nosso culto dominical",
-    data: "Março 2024",
-    categoria: "Cultos",
-  },
-  {
-    url: "https://placehold.co/800x800",
-    titulo: "Retiro de Jovens",
-    descricao: "Juventude reunida para um fim de semana especial",
-    data: "Fevereiro 2024",
-    categoria: "Jovens",
-  },
-  {
-    url: "https://placehold.co/800x800",
-    titulo: "Encontro de Famílias",
-    descricao: "Momento de comunhão entre as famílias da igreja",
-    data: "Janeiro 2024",
-    categoria: "Família",
-  },
-  {
-    url: "https://placehold.co/800x800",
-    titulo: "Ação Missionária",
-    descricao: "Trabalho social realizado em comunidade carente",
-    data: "Dezembro 2023",
-    categoria: "Missões",
-  },
-  {
-    url: "https://placehold.co/800x800",
-    titulo: "Conferência Anual",
-    descricao: "Principal evento do ano em nossa igreja",
-    data: "Novembro 2023",
-    categoria: "Eventos",
-  },
-  {
-    url: "https://placehold.co/800x800",
-    titulo: "Batismos",
-    descricao: "Celebração de novos membros em nossa igreja",
-    data: "Outubro 2023",
-    categoria: "Cultos",
-  },
-  // Adicione mais fotos conforme necessário
-];
+// Carregar dados do Firebase
+onMounted(async () => {
+  try {
+    // Carregar categorias
+    const categoriasDoc = await getDoc(doc(db, 'galeria', 'categorias'));
+    if (categoriasDoc.exists()) {
+      const cats = categoriasDoc.data().lista;
+      if (!cats.includes('Todos')) {
+        cats.unshift('Todos');
+      }
+      categorias.value = cats;
+    }
+    
+    // Carregar fotos
+    const fotosSnapshot = await getDocs(collection(db, 'fotos'));
+    fotos.value = fotosSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Erro ao carregar dados da galeria:', error);
+  }
+
+  // Adicionar eventos de teclado para navegação
+  window.addEventListener("keydown", handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
+
+const handleKeyDown = (e) => {
+  if (!modalAberto.value) return;
+
+  if (e.key === "Escape") fecharModal();
+  if (e.key === "ArrowRight") proximaImagem();
+  if (e.key === "ArrowLeft") imagemAnterior();
+};
 
 const fotosFiltradas = computed(() => {
   if (categoriaAtual.value === "Todos") {
-    return fotos;
+    return fotos.value;
   }
-  return fotos.filter((foto) => foto.categoria === categoriaAtual.value);
+  return fotos.value.filter((foto) => foto.categoria === categoriaAtual.value);
 });
 
 const abrirModal = (index) => {
@@ -194,27 +183,6 @@ const imagemAnterior = () => {
     (indiceAtual.value - 1 + fotosFiltradas.value.length) %
     fotosFiltradas.value.length;
 };
-
-// Adicionar eventos de teclado para navegação
-onMounted(() => {
-  window.addEventListener("keydown", (e) => {
-    if (!modalAberto.value) return;
-
-    if (e.key === "Escape") fecharModal();
-    if (e.key === "ArrowRight") proximaImagem();
-    if (e.key === "ArrowLeft") imagemAnterior();
-  });
-});
-
-onUnmounted(() => {
-  window.removeEventListener("keydown", (e) => {
-    if (!modalAberto.value) return;
-
-    if (e.key === "Escape") fecharModal();
-    if (e.key === "ArrowRight") proximaImagem();
-    if (e.key === "ArrowLeft") imagemAnterior();
-  });
-});
 </script>
 
 <style scoped>

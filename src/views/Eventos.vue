@@ -91,54 +91,46 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { CalendarIcon, ClockIcon, MapPinIcon } from "@heroicons/vue/24/outline";
+import { db } from '../firebase/config';
+import { collection, getDocs } from 'firebase/firestore';
 
 const filtroAtual = ref("Todos");
-const categorias = ["Todos", "Cultos", "Jovens" /* , "Família" */];
+const categorias = ["Todos", "Cultos", "Jovens", "Família"];
+const eventos = ref([]);
 
-const eventos = [
-  {
-    id: 1,
-    titulo: "Culto de Celebração",
-    descricao:
-      "Venha celebrar conosco neste domingo especial com muita adoração e palavra.",
-    data: "Todos os Domingos",
-    horario: "18:00",
-    local: "Templo Principal",
-    categoria: "Cultos",
-    imagem:
-      "https://res.cloudinary.com/dgbo657qq/image/upload/v1742229075/2_jbq7n7.png",
-  },
-  {
-    id: 2,
-    titulo: "Culto Máscaras",
-    descricao:
-      "Uma noite especial para juventude com louvor, dinâmicas e muito mais.",
-    data: "29/03/2024",
-    horario: "19:00",
-    local: "Rua 14 de Julho, 1152 - Centro",
-    categoria: "Jovens",
-    imagem:
-      "https://res.cloudinary.com/dgbo657qq/image/upload/v1742235979/3-1_svudrc.png",
-  },
-  /*   {
-    id: 3,
-    titulo: "Retiro de Famílias",
-    descricao: "Um fim de semana especial para fortalecer os laços familiares.",
-    data: "20/04/2024",
-    horario: "08:00",
-    local: "Chácara Recanto",
-    categoria: "Família",
-    imagem: "https://placehold.co/600x400",
-  }, */
-];
+// Carregar eventos do Firebase
+onMounted(async () => {
+  try {
+    const eventosSnapshot = await getDocs(collection(db, 'eventos'));
+    eventos.value = eventosSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    // Atualizar categorias baseado nos eventos existentes
+    const categoriasExistentes = ["Todos"];
+    eventos.value.forEach(evento => {
+      if (!categoriasExistentes.includes(evento.categoria)) {
+        categoriasExistentes.push(evento.categoria);
+      }
+    });
+    
+    // Atualizar lista de categorias se houver novas
+    if (categoriasExistentes.length > 1) {
+      categorias.value = categoriasExistentes;
+    }
+  } catch (error) {
+    console.error('Erro ao carregar eventos:', error);
+  }
+});
 
 const eventosFiltrados = computed(() => {
   if (filtroAtual.value === "Todos") {
-    return eventos;
+    return eventos.value;
   }
-  return eventos.filter((evento) => evento.categoria === filtroAtual.value);
+  return eventos.value.filter((evento) => evento.categoria === filtroAtual.value);
 });
 </script>
 

@@ -1,4 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '../firebase/config'
+
+// Guard de rota para áreas protegidas
+const requireAuth = (to, from, next) => {
+  const user = auth.currentUser;
+  if (!user) {
+    next({ name: 'AdminLogin' });
+  } else {
+    next();
+  }
+};
 
 const routes = [
   {
@@ -30,6 +41,38 @@ const routes = [
     path: '/contato',
     name: 'Contato',
     component: () => import('../views/Contato.vue')
+  },
+  // Rotas administrativas
+  {
+    path: '/admin/login',
+    name: 'AdminLogin',
+    component: () => import('../views/Admin/Login.vue')
+  },
+  {
+    path: '/admin',
+    name: 'AdminDashboard',
+    component: () => import('../views/Admin/Dashboard.vue'),
+    beforeEnter: requireAuth,
+    children: [
+      {
+        path: 'sobre',
+        name: 'AdminSobre',
+        component: () => import('../views/Admin/SobreAdmin.vue'),
+        beforeEnter: requireAuth
+      },
+      {
+        path: 'eventos',
+        name: 'AdminEventos',
+        component: () => import('../views/Admin/EventosAdmin.vue'),
+        beforeEnter: requireAuth
+      },
+      {
+        path: 'galeria',
+        name: 'AdminGaleria',
+        component: () => import('../views/Admin/GaleriaAdmin.vue'),
+        beforeEnter: requireAuth
+      }
+    ]
   }
 ]
 

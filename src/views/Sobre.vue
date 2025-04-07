@@ -15,22 +15,18 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 class="text-3xl font-bold mb-6 text-gray-800">
-              Nossa História
+              {{ historia.titulo }}
             </h2>
             <p class="text-gray-600 mb-4">
-              Fundada em 1990, nossa igreja nasceu do sonho de criar um espaço
-              acolhedor onde pessoas pudessem encontrar esperança e propósito
-              através da fé em Cristo.
+              {{ historia.paragrafo1 }}
             </p>
             <p class="text-gray-600 mb-4">
-              Ao longo dos anos, crescemos de um pequeno grupo de fiéis para uma
-              comunidade vibrante e diversificada, sempre mantendo nossos
-              valores fundamentais de amor, compaixão e serviço ao próximo.
+              {{ historia.paragrafo2 }}
             </p>
           </div>
           <div class="relative w-full overflow-hidden rounded-lg">
             <img
-              src="https://res.cloudinary.com/dgbo657qq/image/upload/v1742229075/1_clr136.png"
+              :src="historia.imagemUrl"
               alt="História da Igreja"
               class="w-full h-auto max-w-full object-contain"
             />
@@ -155,12 +151,14 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import {
   HeartIcon,
   UserGroupIcon,
   HandRaisedIcon,
 } from "@heroicons/vue/24/outline";
+import { db } from '../firebase/config';
+import { collection, doc, getDocs, getDoc } from 'firebase/firestore';
 
 const igrejas = ["IEAB CG - Central", "IEAB CG - Norte"];
 const igrejaAtual = ref("IEAB CG - Central");
@@ -173,108 +171,42 @@ const categorias = [
 ];
 const categoriaAtual = ref("Pastoreio");
 
-const liderescentral = [
-  {
-    nome: "Jocemiro Aparecido da Silva",
-    cargo: "Pastor Principal",
-    foto: "https://placehold.co/200x200",
-    categoria: "Pastoreio",
-  },
-  {
-    nome: "Dilson Júnior Machado",
-    cargo: "Presbítero",
-    foto: "https://placehold.co/200x200",
-    categoria: "Presbitério",
-  },
-  {
-    nome: "Arthur Lima da Costa",
-    cargo: "Presbítero",
-    foto: "https://placehold.co/200x200",
-    categoria: "Presbitério",
-  },
+// História da Igreja
+const historia = ref({
+  titulo: "Nossa História",
+  paragrafo1: "Fundada em 1990, nossa igreja nasceu do sonho de criar um espaço acolhedor onde pessoas pudessem encontrar esperança e propósito através da fé em Cristo.",
+  paragrafo2: "Ao longo dos anos, crescemos de um pequeno grupo de fiéis para uma comunidade vibrante e diversificada, sempre mantendo nossos valores fundamentais de amor, compaixão e serviço ao próximo.",
+  imagemUrl: "https://res.cloudinary.com/dgbo657qq/image/upload/v1742229075/1_clr136.png"
+});
 
-  // Líderes
-  {
-    nome: "Arthur Lima da Costa",
-    cargo: "Assessor de Música",
-    foto: "https://placehold.co/200x200",
-    categoria: "Líderes",
-  },
-  {
-    nome: "Dilson Júnior Machado",
-    cargo: "Assessor de Adultos",
-    foto: "https://placehold.co/200x200",
-    categoria: "Líderes",
-  },
-  {
-    nome: "Claudia Cristina",
-    cargo: "Assessora de Adultos",
-    foto: "https://placehold.co/200x200",
-    categoria: "Líderes",
-  },
+// Líderes
+const lideres = ref([]);
 
-  {
-    nome: "Leonardo Zampiva",
-    cargo: "Assessor de Jovens",
-    foto: "https://placehold.co/200x200",
-    categoria: "Líderes",
-  },
-  {
-    nome: "Luciana Zampiva",
-    cargo: "Assessora de Jovens",
-    foto: "https://placehold.co/200x200",
-    categoria: "Líderes",
-  },
-
-  // Missionário
-  /*   {
-    nome: " ",
-    cargo: "Missionária",
-    foto: "https://placehold.co/200x200",
-    categoria: "Missionários",
-  }, */
-
-  // Diaconia
-  {
-    nome: "Juvaldo",
-    cargo: "Lider de Diaconia",
-    foto: "https://placehold.co/200x200",
-    categoria: "Diaconia",
-  },
-  {
-    nome: "Rogério",
-    cargo: "Diácono",
-    foto: "https://placehold.co/200x200",
-    categoria: "Diaconia",
-  },
-  {
-    nome: "Ednil",
-    cargo: "Diácono",
-    foto: "https://placehold.co/200x200",
-    categoria: "Diaconia",
-  },
-];
-
-const lideresnorte = [
-  {
-    nome: "Luis",
-    cargo: "Pastor Principal",
-    foto: "https://placehold.co/200x200",
-    categoria: "Pastoreio",
-  },
-  {
-    nome: "Thamiris Veloso",
-    cargo: "Missionária",
-    foto: "https://placehold.co/200x200",
-    categoria: "Missionários",
-  },
-];
+// Carregar dados do Firebase
+onMounted(async () => {
+  try {
+    // Carregar história
+    const historiaDoc = await getDoc(doc(db, 'sobre', 'historia'));
+    if (historiaDoc.exists()) {
+      historia.value = historiaDoc.data();
+    }
+    
+    // Carregar líderes
+    const lideresSnapshot = await getDocs(collection(db, 'lideres'));
+    lideres.value = lideresSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+  }
+});
 
 const lideresFilterados = computed(() => {
-  const lideresDaIgreja =
-    igrejaAtual.value === "IEAB CG - Central" ? liderescentral : lideresnorte;
-  return lideresDaIgreja.filter(
-    (lider) => lider.categoria === categoriaAtual.value
+  return lideres.value.filter(
+    (lider) => 
+      lider.categoria === categoriaAtual.value && 
+      lider.igreja === igrejaAtual.value
   );
 });
 </script>

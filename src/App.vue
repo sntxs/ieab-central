@@ -25,6 +25,15 @@
             >
               {{ link.text }}
             </router-link>
+            
+            <!-- Botão de Admin -->
+            <router-link
+              to="/admin/login"
+              class="px-3 py-2 rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 ease-in-out flex items-center"
+            >
+              <LockClosedIcon class="h-4 w-4 mr-1" />
+              ADMIN
+            </router-link>
           </div>
 
           <!-- Menu Mobile -->
@@ -57,6 +66,16 @@
             @click="toggleMenu"
           >
             {{ link.text }}
+          </router-link>
+          
+          <!-- Botão de Admin para Mobile -->
+          <router-link
+            to="/admin/login"
+            class="block px-4 py-3 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 ease-in-out mt-2 flex items-center"
+            @click="toggleMenu"
+          >
+            <LockClosedIcon class="h-4 w-4 mr-2" />
+            Área Administrativa
           </router-link>
         </div>
       </div>
@@ -214,6 +233,7 @@ import {
   PhoneIcon,
   EnvelopeIcon,
   MapPinIcon,
+  LockClosedIcon,
 } from "@heroicons/vue/24/outline";
 
 const isMenuOpen = ref(false);
