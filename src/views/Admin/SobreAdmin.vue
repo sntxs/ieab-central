@@ -149,7 +149,7 @@
                   Editar
                 </button>
                 <button 
-                  @click="excluirLider(lider.id)" 
+                  @click="confirmarExclusao(lider.id)" 
                   class="text-red-600 hover:text-red-800"
                 >
                   Excluir
@@ -229,6 +229,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para confirmação de exclusão -->
+    <ConfirmModal
+      :show="showConfirmModal"
+      :title="'Confirmar exclusão'"
+      :message="'Tem certeza que deseja excluir este líder? Esta ação não pode ser desfeita.'"
+      @confirm="confirmarExclusaoLider"
+      @cancel="cancelarExclusao"
+    />
   </div>
 </template>
 
@@ -239,12 +248,15 @@ import {
   collection, doc, getDocs, addDoc, updateDoc, deleteDoc, 
   query, where, getDoc, setDoc 
 } from 'firebase/firestore';
+import ConfirmModal from '../../components/ConfirmModal.vue';
 
 const activeTab = ref('historia');
 const loading = ref(false);
 const successMessage = ref('');
 const showLiderModal = ref(false);
 const liderEmEdicao = ref(null);
+const showConfirmModal = ref(false);
+const itemIdParaExcluir = ref(null);
 
 // História da igreja
 const historiaData = ref({
@@ -363,17 +375,35 @@ async function salvarLider() {
   }
 }
 
-async function excluirLider(id) {
-  if (confirm('Tem certeza que deseja excluir este líder?')) {
-    try {
-      await deleteDoc(doc(db, 'lideres', id));
-      lideres.value = lideres.value.filter(lider => lider.id !== id);
-      mostrarMensagemSucesso('Líder excluído com sucesso!');
-    } catch (error) {
-      console.error('Erro ao excluir líder:', error);
-    }
+// Confirmar exclusão do líder
+const confirmarExclusao = (id) => {
+  itemIdParaExcluir.value = id;
+  showConfirmModal.value = true;
+};
+
+const confirmarExclusaoLider = async () => {
+  if (itemIdParaExcluir.value) {
+    await excluirLider(itemIdParaExcluir.value);
+    showConfirmModal.value = false;
+    itemIdParaExcluir.value = null;
   }
-}
+};
+
+const cancelarExclusao = () => {
+  showConfirmModal.value = false;
+  itemIdParaExcluir.value = null;
+};
+
+// Excluir líder
+const excluirLider = async (id) => {
+  try {
+    await deleteDoc(doc(db, 'lideres', id));
+    await carregarLideres();
+    mostrarMensagemSucesso('Líder excluído com sucesso!');
+  } catch (error) {
+    console.error('Erro ao excluir líder:', error);
+  }
+};
 
 function mostrarMensagemSucesso(mensagem) {
   successMessage.value = mensagem;

@@ -74,7 +74,7 @@
             Editar
           </button>
           <button 
-            @click="excluirEvento(evento.id)" 
+            @click="confirmarExclusao(evento.id)" 
             class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline"
           >
             Excluir
@@ -186,6 +186,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para confirmação de exclusão -->
+    <ConfirmModal
+      :show="showConfirmModal"
+      :title="'Confirmar exclusão'"
+      :message="'Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.'"
+      @confirm="confirmarExclusaoEvento"
+      @cancel="cancelarExclusao"
+    />
   </div>
 </template>
 
@@ -196,6 +205,7 @@ import {
   collection, doc, getDocs, addDoc, updateDoc, deleteDoc,
   query, where 
 } from 'firebase/firestore';
+import ConfirmModal from '../../components/ConfirmModal.vue';
 
 const filtroAtual = ref("Todos");
 const categorias = ["Todos", "Cultos", "Jovens", "Família"];
@@ -205,6 +215,8 @@ const loading = ref(false);
 const successMessage = ref('');
 const showEventoModal = ref(false);
 const eventoEmEdicao = ref(null);
+const showConfirmModal = ref(false);
+const itemIdParaExcluir = ref(null);
 
 // Form para adicionar/editar evento
 const formEvento = ref({
@@ -290,17 +302,35 @@ async function salvarEvento() {
   }
 }
 
-async function excluirEvento(id) {
-  if (confirm('Tem certeza que deseja excluir este evento?')) {
-    try {
-      await deleteDoc(doc(db, 'eventos', id));
-      eventos.value = eventos.value.filter(evento => evento.id !== id);
-      mostrarMensagemSucesso('Evento excluído com sucesso!');
-    } catch (error) {
-      console.error('Erro ao excluir evento:', error);
-    }
+// Confirmar exclusão de evento
+const confirmarExclusao = (id) => {
+  itemIdParaExcluir.value = id;
+  showConfirmModal.value = true;
+};
+
+const confirmarExclusaoEvento = async () => {
+  if (itemIdParaExcluir.value) {
+    await excluirEvento(itemIdParaExcluir.value);
+    showConfirmModal.value = false;
+    itemIdParaExcluir.value = null;
   }
-}
+};
+
+const cancelarExclusao = () => {
+  showConfirmModal.value = false;
+  itemIdParaExcluir.value = null;
+};
+
+// Excluir evento
+const excluirEvento = async (id) => {
+  try {
+    await deleteDoc(doc(db, 'eventos', id));
+    await carregarEventos();
+    mostrarMensagemSucesso('Evento excluído com sucesso!');
+  } catch (error) {
+    console.error('Erro ao excluir evento:', error);
+  }
+};
 
 function mostrarMensagemSucesso(mensagem) {
   successMessage.value = mensagem;

@@ -46,7 +46,7 @@
                   Editar
                 </button>
                 <button 
-                  @click="excluirCategoria(index)" 
+                  @click="confirmarExclusaoCategoria(index)" 
                   class="text-red-600 hover:text-red-800"
                   :disabled="categoria === 'Todos'"
                 >
@@ -102,7 +102,7 @@
             Editar
           </button>
           <button 
-            @click="excluirFoto(foto.id)" 
+            @click="confirmarExclusaoFoto(foto.id)" 
             class="mx-1 bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline"
           >
             Excluir
@@ -223,6 +223,24 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para confirmação de exclusão de fotos -->
+    <ConfirmModal
+      :show="showConfirmModalFoto"
+      :title="'Confirmar exclusão'"
+      :message="'Tem certeza que deseja excluir esta imagem? Esta ação não pode ser desfeita.'"
+      @confirm="confirmarExclusaoFotoFinal"
+      @cancel="cancelarExclusao"
+    />
+
+    <!-- Modal para confirmação de exclusão de categorias -->
+    <ConfirmModal
+      :show="showConfirmModalCategoria"
+      :title="'Confirmar exclusão'"
+      :message="'Tem certeza que deseja excluir esta categoria? Todas as imagens nesta categoria serão afetadas. Esta ação não pode ser desfeita.'"
+      @confirm="confirmarExclusaoCategoriaFinal"
+      @cancel="cancelarExclusao"
+    />
   </div>
 </template>
 
@@ -233,6 +251,7 @@ import {
   collection, doc, getDocs, addDoc, updateDoc, deleteDoc,
   query, where, getDoc, setDoc
 } from 'firebase/firestore';
+import ConfirmModal from '../../components/ConfirmModal.vue';
 
 const categoriaAtual = ref("Todos");
 const categorias = ref(["Todos", "Cultos", "Eventos", "Jovens", "Família", "Missões"]);
@@ -255,6 +274,12 @@ const formFoto = ref({
 const showCategoriaModal = ref(false);
 const categoriaEmEdicao = ref(null);
 const formCategoria = ref('');
+
+// Modais de confirmação
+const showConfirmModalFoto = ref(false);
+const showConfirmModalCategoria = ref(false);
+const itemIdParaExcluir = ref(null);
+const indiceCategoriaParaExcluir = ref(null);
 
 const fotosFiltradas = computed(() => {
   if (categoriaAtual.value === "Todos") {
@@ -345,17 +370,30 @@ async function salvarFoto() {
   }
 }
 
-async function excluirFoto(id) {
-  if (confirm('Tem certeza que deseja excluir esta imagem?')) {
-    try {
-      await deleteDoc(doc(db, 'fotos', id));
-      fotos.value = fotos.value.filter(foto => foto.id !== id);
-      mostrarMensagemSucesso('Imagem excluída com sucesso!');
-    } catch (error) {
-      console.error('Erro ao excluir foto:', error);
-    }
+// Confirmação de exclusão de foto
+const confirmarExclusaoFoto = (id) => {
+  itemIdParaExcluir.value = id;
+  showConfirmModalFoto.value = true;
+};
+
+const confirmarExclusaoFotoFinal = async () => {
+  if (itemIdParaExcluir.value) {
+    await excluirFoto(itemIdParaExcluir.value);
+    showConfirmModalFoto.value = false;
+    itemIdParaExcluir.value = null;
   }
-}
+};
+
+// Excluir foto
+const excluirFoto = async (id) => {
+  try {
+    await deleteDoc(doc(db, 'fotos', id));
+    await carregarFotos();
+    mostrarMensagemSucesso('Imagem excluída com sucesso!');
+  } catch (error) {
+    console.error('Erro ao excluir imagem:', error);
+  }
+};
 
 // Funções para gerenciar categorias
 function mostrarFormCategoria() {
@@ -410,45 +448,44 @@ async function salvarCategoria() {
   }
 }
 
-async function excluirCategoria(index) {
+// Confirmação de exclusão de categoria
+const confirmarExclusaoCategoria = (index) => {
+  indiceCategoriaParaExcluir.value = index;
+  showConfirmModalCategoria.value = true;
+};
+
+const confirmarExclusaoCategoriaFinal = async () => {
+  if (indiceCategoriaParaExcluir.value !== null) {
+    await excluirCategoria(indiceCategoriaParaExcluir.value);
+    showConfirmModalCategoria.value = false;
+    indiceCategoriaParaExcluir.value = null;
+  }
+};
+
+// Excluir categoria
+const excluirCategoria = async (index) => {
+  if (categorias.value[index] === 'Todos') return;
+  
   const categoriaParaExcluir = categorias.value[index];
   
-  if (categoriaParaExcluir === 'Todos') return; // Não permitir excluir a categoria 'Todos'
-  
-  // Verificar se existem fotos com esta categoria
-  const fotosComCategoria = fotos.value.filter(foto => foto.categoria === categoriaParaExcluir);
-  
-  if (fotosComCategoria.length > 0) {
-    if (!confirm(`Existem ${fotosComCategoria.length} imagens com esta categoria. Ao excluir, estas imagens serão movidas para a primeira categoria disponível. Deseja continuar?`)) {
-      return;
-    }
-    
-    // Definir categoria alternativa (primeira categoria que não é 'Todos' e não é a categoria a ser excluída)
-    const categoriaAlternativa = categorias.value.find(c => c !== 'Todos' && c !== categoriaParaExcluir);
-    
-    // Atualizar todas as fotos com a categoria excluída
-    for (const foto of fotosComCategoria) {
-      const fotoRef = doc(db, 'fotos', foto.id);
-      await updateDoc(fotoRef, { categoria: categoriaAlternativa });
-      foto.categoria = categoriaAlternativa;
-    }
-  } else if (!confirm('Tem certeza que deseja excluir esta categoria?')) {
-    return;
-  }
-  
   try {
-    // Remover a categoria
-    const novasCategorias = categorias.value.filter((_, i) => i !== index);
+    // Remover a categoria do array
+    const categoriasFiltradas = categorias.value.filter((_, i) => i !== index);
+    categorias.value = categoriasFiltradas;
     
-    // Salvar as categorias no Firestore
-    await setDoc(doc(db, 'galeria', 'categorias'), { lista: novasCategorias });
-    categorias.value = novasCategorias;
+    // Atualizar as categorias no Firestore
+    await setDoc(doc(db, 'galeria', 'categorias'), { lista: categoriasFiltradas.filter(categoria => categoria !== 'Todos') });
+    
+    // Atualizar a categoria atual se necessário
+    if (categoriaAtual.value === categoriaParaExcluir) {
+      categoriaAtual.value = 'Todos';
+    }
     
     mostrarMensagemSucesso('Categoria excluída com sucesso!');
   } catch (error) {
     console.error('Erro ao excluir categoria:', error);
   }
-}
+};
 
 function mostrarMensagemSucesso(mensagem) {
   successMessage.value = mensagem;
@@ -456,4 +493,11 @@ function mostrarMensagemSucesso(mensagem) {
     successMessage.value = '';
   }, 3000);
 }
+
+const cancelarExclusao = () => {
+  showConfirmModalFoto.value = false;
+  showConfirmModalCategoria.value = false;
+  itemIdParaExcluir.value = null;
+  indiceCategoriaParaExcluir.value = null;
+};
 </script> 

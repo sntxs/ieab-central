@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '../firebase/config'
+import AdminLayout from '../layouts/AdminLayout.vue'
 
 // Guard de rota para áreas protegidas
 const requireAuth = (to, from, next) => {
@@ -44,33 +45,39 @@ const routes = [
   },
   // Rotas administrativas
   {
-    path: '/admin/login',
-    name: 'AdminLogin',
-    component: () => import('../views/Admin/Login.vue')
-  },
-  {
     path: '/admin',
-    name: 'AdminDashboard',
-    component: () => import('../views/Admin/Dashboard.vue'),
-    beforeEnter: requireAuth,
+    component: AdminLayout,
     children: [
       {
-        path: 'sobre',
-        name: 'AdminSobre',
-        component: () => import('../views/Admin/SobreAdmin.vue'),
-        beforeEnter: requireAuth
+        path: 'login',
+        name: 'AdminLogin',
+        component: () => import('../views/Admin/Login.vue')
       },
       {
-        path: 'eventos',
-        name: 'AdminEventos',
-        component: () => import('../views/Admin/EventosAdmin.vue'),
-        beforeEnter: requireAuth
-      },
-      {
-        path: 'galeria',
-        name: 'AdminGaleria',
-        component: () => import('../views/Admin/GaleriaAdmin.vue'),
-        beforeEnter: requireAuth
+        path: '',
+        name: 'AdminDashboard',
+        component: () => import('../views/Admin/Dashboard.vue'),
+        beforeEnter: requireAuth,
+        children: [
+          {
+            path: 'sobre',
+            name: 'AdminSobre',
+            component: () => import('../views/Admin/SobreAdmin.vue'),
+            beforeEnter: requireAuth
+          },
+          {
+            path: 'eventos',
+            name: 'AdminEventos',
+            component: () => import('../views/Admin/EventosAdmin.vue'),
+            beforeEnter: requireAuth
+          },
+          {
+            path: 'galeria',
+            name: 'AdminGaleria',
+            component: () => import('../views/Admin/GaleriaAdmin.vue'),
+            beforeEnter: requireAuth
+          }
+        ]
       }
     ]
   }
