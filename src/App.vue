@@ -215,10 +215,10 @@
             <p class="text-gray-500 text-xs">
               Desenvolvido por
               <a
-                href="https://nata-portifolio.vercel.app"
+                href="https://www.devmates.com.br/"
                 target="_blank"
                 class="hover:text-[#FFF] transition-colors"
-                >© {{ currentYear }} NR.dev</a
+                >© {{ currentYear }} DevMates - Web Solutions</a
               >
             </p>
           </div>
