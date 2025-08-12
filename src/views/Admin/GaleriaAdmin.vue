@@ -2,10 +2,8 @@
   <div>
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold">Gerenciar Galeria</h1>
-      <button 
-        @click="mostrarFormFoto(null)" 
-        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
+      <button @click="mostrarFormFoto(null)"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
         Adicionar Imagem
       </button>
     </div>
@@ -19,37 +17,31 @@
     <div class="mb-8 bg-white p-6 rounded-lg shadow-md">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold">Categorias da Galeria</h2>
-        <button 
-          @click="mostrarFormCategoria" 
-          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline"
-        >
+        <button @click="mostrarFormCategoria"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline">
           Adicionar Categoria
         </button>
       </div>
-      
+
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white">
           <thead>
             <tr>
-              <th class="py-2 px-4 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nome da Categoria</th>
-              <th class="py-2 px-4 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ações</th>
+              <th class="py-2 px-4 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Nome da Categoria</th>
+              <th class="py-2 px-4 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(categoria, index) in categorias" :key="index" class="border-b">
               <td class="py-2 px-4">{{ categoria }}</td>
               <td class="py-2 px-4">
-                <button 
-                  @click="editarCategoria(index)" 
-                  class="mr-2 text-blue-600 hover:text-blue-800"
-                >
+                <button @click="editarCategoria(index)" class="mr-2 text-blue-600 hover:text-blue-800">
                   Editar
                 </button>
-                <button 
-                  @click="confirmarExclusaoCategoria(index)" 
-                  class="text-red-600 hover:text-red-800"
-                  :disabled="categoria === 'Todos'"
-                >
+                <button @click="confirmarExclusaoCategoria(index)" class="text-red-600 hover:text-red-800"
+                  :disabled="categoria === 'Todos'">
                   Excluir
                 </button>
               </td>
@@ -61,50 +53,38 @@
 
     <!-- Filtro de categorias -->
     <div class="flex flex-wrap justify-center gap-4 mb-8">
-      <button
-        v-for="categoria in categorias"
-        :key="categoria"
-        @click="categoriaAtual = categoria"
-        :class="[
-          'px-4 py-2 rounded-full transition-colors',
-          categoriaAtual === categoria
-            ? 'bg-blue-600 text-white'
-            : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-        ]"
-      >
+      <button v-for="categoria in categorias" :key="categoria" @click="categoriaAtual = categoria" :class="[
+        'px-4 py-2 rounded-full transition-colors',
+        categoriaAtual === categoria
+          ? 'bg-blue-600 text-white'
+          : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+      ]">
         {{ categoria }}
       </button>
     </div>
 
     <!-- Grid de Imagens -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <div
-        v-for="(foto, index) in fotosFiltradas"
-        :key="foto.id"
-        class="relative group bg-white p-2 rounded-lg shadow-md"
-      >
+      <div v-for="(foto, index) in fotosFiltradas" :key="foto.id"
+        class="relative group bg-white p-2 rounded-lg shadow-md">
         <div class="aspect-square overflow-hidden rounded-lg">
-          <img
-            :src="foto.url"
-            :alt="foto.titulo"
-            class="w-full h-full object-cover"
-          />
+          <img v-if="foto.url" :src="foto.url" :alt="foto.titulo" class="w-full h-full object-cover" />
+          <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+            Sem imagem
+          </div>
         </div>
         <div class="p-2">
           <h3 class="font-bold text-gray-800 truncate">{{ foto.titulo }}</h3>
           <p class="text-sm text-gray-600">{{ foto.data }}</p>
         </div>
-        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <button 
-            @click="mostrarFormFoto(foto)" 
-            class="mx-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline"
-          >
+        <div
+          class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+          <button @click="mostrarFormFoto(foto)"
+            class="mx-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline">
             Editar
           </button>
-          <button 
-            @click="confirmarExclusaoFoto(foto.id)" 
-            class="mx-1 bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline"
-          >
+          <button @click="confirmarExclusaoFoto(foto.id)"
+            class="mx-1 bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm focus:outline-none focus:shadow-outline">
             Excluir
           </button>
         </div>
@@ -120,71 +100,59 @@
     <div v-if="showFotoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 class="text-xl font-bold mb-4">{{ fotoEmEdicao ? 'Editar' : 'Adicionar' }} Imagem</h2>
-        
+
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2">Título</label>
-          <input
-            v-model="formFoto.titulo"
-            type="text"
+          <input v-model="formFoto.titulo" type="text"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          >
+            required>
         </div>
-        
+
         <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2">URL da Imagem</label>
-          <input
-            v-model="formFoto.url"
-            type="text"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          >
+          <label class="block text-gray-700 text-sm font-bold mb-2">Imagem</label>
+          <input type="file" accept="image/*" @change="onImagemSelecionada"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          <div v-if="formFoto.url" class="mt-2">
+            <img :src="formFoto.url" alt="Pré-visualização" class="w-32 h-auto rounded border" />
+            <p class="text-xs text-gray-500 mt-1">Pré-visualização da imagem</p>
+          </div>
+          <div v-if="imagemUploadCarregando" class="text-sm text-gray-600 mt-1">
+            Processando imagem...
+          </div>
         </div>
-        
+
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2">Descrição</label>
-          <textarea
-            v-model="formFoto.descricao"
-            rows="2"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          ></textarea>
+          <textarea v-model="formFoto.descricao" rows="2"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
         </div>
-        
+
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2">Data</label>
-          <input
-            v-model="formFoto.data"
-            type="text"
+          <input v-model="formFoto.data" type="text"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Ex: Março 2024"
-          >
+            placeholder="Ex: Março 2024">
         </div>
-        
+
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2">Categoria</label>
-          <select
-            v-model="formFoto.categoria"
+          <select v-model="formFoto.categoria"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          >
+            required>
             <option v-for="categoria in categorias.filter(c => c !== 'Todos')" :key="categoria" :value="categoria">
               {{ categoria }}
             </option>
           </select>
         </div>
-        
+
         <div class="flex justify-end">
-          <button 
-            @click="showFotoModal = false" 
-            class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
+          <button @click="showFotoModal = false"
+            class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             Cancelar
           </button>
-          <button 
-            @click="salvarFoto" 
+          <button @click="salvarFoto"
             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            :disabled="loading"
-          >
+            :disabled="loading || imagemUploadCarregando">
             <span v-if="loading">Salvando...</span>
             <span v-else>Salvar</span>
           </button>
@@ -196,28 +164,21 @@
     <div v-if="showCategoriaModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 class="text-xl font-bold mb-4">{{ categoriaEmEdicao !== null ? 'Editar' : 'Adicionar' }} Categoria</h2>
-        
+
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2">Nome da Categoria</label>
-          <input
-            v-model="formCategoria"
-            type="text"
+          <input v-model="formCategoria" type="text"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          >
+            required>
         </div>
-        
+
         <div class="flex justify-end">
-          <button 
-            @click="showCategoriaModal = false" 
-            class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
+          <button @click="showCategoriaModal = false"
+            class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             Cancelar
           </button>
-          <button 
-            @click="salvarCategoria" 
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
+          <button @click="salvarCategoria"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             Salvar
           </button>
         </div>
@@ -225,29 +186,21 @@
     </div>
 
     <!-- Modal para confirmação de exclusão de fotos -->
-    <ConfirmModal
-      :show="showConfirmModalFoto"
-      :title="'Confirmar exclusão'"
+    <ConfirmModal :show="showConfirmModalFoto" :title="'Confirmar exclusão'"
       :message="'Tem certeza que deseja excluir esta imagem? Esta ação não pode ser desfeita.'"
-      @confirm="confirmarExclusaoFotoFinal"
-      @cancel="cancelarExclusao"
-    />
+      @confirm="confirmarExclusaoFotoFinal" @cancel="cancelarExclusao" />
 
     <!-- Modal para confirmação de exclusão de categorias -->
-    <ConfirmModal
-      :show="showConfirmModalCategoria"
-      :title="'Confirmar exclusão'"
+    <ConfirmModal :show="showConfirmModalCategoria" :title="'Confirmar exclusão'"
       :message="'Tem certeza que deseja excluir esta categoria? Todas as imagens nesta categoria serão afetadas. Esta ação não pode ser desfeita.'"
-      @confirm="confirmarExclusaoCategoriaFinal"
-      @cancel="cancelarExclusao"
-    />
+      @confirm="confirmarExclusaoCategoriaFinal" @cancel="cancelarExclusao" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { db } from '../../firebase/config';
-import { 
+import {
   collection, doc, getDocs, addDoc, updateDoc, deleteDoc,
   query, where, getDoc, setDoc
 } from 'firebase/firestore';
@@ -259,12 +212,15 @@ const fotos = ref([]);
 const loading = ref(false);
 const successMessage = ref('');
 
+// Estado de upload de imagem
+const imagemUploadCarregando = ref(false);
+
 // Modal para fotos
 const showFotoModal = ref(false);
 const fotoEmEdicao = ref(null);
 const formFoto = ref({
   titulo: '',
-  url: 'https://placehold.co/800x800',
+  url: '',
   descricao: '',
   data: '',
   categoria: 'Cultos'
@@ -331,7 +287,7 @@ function mostrarFormFoto(foto) {
     fotoEmEdicao.value = null;
     formFoto.value = {
       titulo: '',
-      url: 'https://placehold.co/800x800',
+      url: '',
       descricao: '',
       data: '',
       categoria: categorias.value.filter(c => c !== 'Todos')[0] || 'Cultos'
@@ -347,13 +303,13 @@ async function salvarFoto() {
       // Atualizar foto existente
       const fotoRef = doc(db, 'fotos', fotoEmEdicao.value.id);
       await updateDoc(fotoRef, formFoto.value);
-      
+
       // Atualizar na lista local
       const index = fotos.value.findIndex(f => f.id === fotoEmEdicao.value.id);
       if (index !== -1) {
         fotos.value[index] = { id: fotoEmEdicao.value.id, ...formFoto.value };
       }
-      
+
       mostrarMensagemSucesso('Imagem atualizada com sucesso!');
     } else {
       // Adicionar nova foto
@@ -361,7 +317,7 @@ async function salvarFoto() {
       fotos.value.push({ id: docRef.id, ...formFoto.value });
       mostrarMensagemSucesso('Imagem adicionada com sucesso!');
     }
-    
+
     showFotoModal.value = false;
   } catch (error) {
     console.error('Erro ao salvar foto:', error);
@@ -395,6 +351,57 @@ const excluirFoto = async (id) => {
   }
 };
 
+// Converter imagem para Base64 e armazenar no Firestore
+async function onImagemSelecionada(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  console.log('Arquivo selecionado:', file);
+
+  // Verificar se é uma imagem válida
+  if (!file.type.startsWith('image/')) {
+    mostrarMensagemSucesso('Por favor, selecione apenas arquivos de imagem.');
+    return;
+  }
+
+  // Verificar tamanho do arquivo (limite de 1MB para Base64)
+  const maxSize = 1024 * 1024; // 1MB
+  if (file.size > maxSize) {
+    mostrarMensagemSucesso('A imagem deve ter no máximo 1MB. Por favor, redimensione a imagem.');
+    return;
+  }
+
+  try {
+    imagemUploadCarregando.value = true;
+
+    // Converter arquivo para Base64
+    const base64 = await converterParaBase64(file);
+    console.log('Base64 gerado (primeiros 100 chars):', base64.substring(0, 100));
+
+    // Definir a imagem no formulário
+    formFoto.value.url = base64;
+    console.log('Imagem definida no formFoto:', formFoto.value.url ? 'Sim' : 'Não');
+
+    imagemUploadCarregando.value = false;
+    mostrarMensagemSucesso('Imagem carregada com sucesso!');
+
+  } catch (error) {
+    console.error('Erro ao processar imagem:', error);
+    mostrarMensagemSucesso('Erro ao processar a imagem. Tente novamente.');
+    imagemUploadCarregando.value = false;
+  }
+}
+
+// Função auxiliar para converter arquivo para Base64
+function converterParaBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file);
+  });
+}
+
 // Funções para gerenciar categorias
 function mostrarFormCategoria() {
   categoriaEmEdicao.value = null;
@@ -404,7 +411,7 @@ function mostrarFormCategoria() {
 
 function editarCategoria(index) {
   if (categorias.value[index] === 'Todos') return; // Não permitir editar a categoria 'Todos'
-  
+
   categoriaEmEdicao.value = index;
   formCategoria.value = categorias.value[index];
   showCategoriaModal.value = true;
@@ -412,15 +419,15 @@ function editarCategoria(index) {
 
 async function salvarCategoria() {
   if (!formCategoria.value.trim()) return;
-  
+
   try {
     // Clonar o array para manipulação
     const novasCategorias = [...categorias.value];
-    
+
     if (categoriaEmEdicao.value !== null) {
       // Atualizar categoria existente
       novasCategorias[categoriaEmEdicao.value] = formCategoria.value;
-      
+
       // Também precisa atualizar a categoria em todas as fotos que a usam
       const categoriaAntiga = categorias.value[categoriaEmEdicao.value];
       for (const foto of fotos.value) {
@@ -430,18 +437,18 @@ async function salvarCategoria() {
           foto.categoria = formCategoria.value;
         }
       }
-      
+
       mostrarMensagemSucesso('Categoria atualizada com sucesso!');
     } else {
       // Adicionar nova categoria
       novasCategorias.push(formCategoria.value);
       mostrarMensagemSucesso('Categoria adicionada com sucesso!');
     }
-    
+
     // Salvar as categorias no Firestore
     await setDoc(doc(db, 'galeria', 'categorias'), { lista: novasCategorias });
     categorias.value = novasCategorias;
-    
+
     showCategoriaModal.value = false;
   } catch (error) {
     console.error('Erro ao salvar categoria:', error);
@@ -465,22 +472,22 @@ const confirmarExclusaoCategoriaFinal = async () => {
 // Excluir categoria
 const excluirCategoria = async (index) => {
   if (categorias.value[index] === 'Todos') return;
-  
+
   const categoriaParaExcluir = categorias.value[index];
-  
+
   try {
     // Remover a categoria do array
     const categoriasFiltradas = categorias.value.filter((_, i) => i !== index);
     categorias.value = categoriasFiltradas;
-    
+
     // Atualizar as categorias no Firestore
     await setDoc(doc(db, 'galeria', 'categorias'), { lista: categoriasFiltradas.filter(categoria => categoria !== 'Todos') });
-    
+
     // Atualizar a categoria atual se necessário
     if (categoriaAtual.value === categoriaParaExcluir) {
       categoriaAtual.value = 'Todos';
     }
-    
+
     mostrarMensagemSucesso('Categoria excluída com sucesso!');
   } catch (error) {
     console.error('Erro ao excluir categoria:', error);
@@ -500,4 +507,4 @@ const cancelarExclusao = () => {
   itemIdParaExcluir.value = null;
   indiceCategoriaParaExcluir.value = null;
 };
-</script> 
+</script>
